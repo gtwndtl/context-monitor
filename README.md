@@ -1,36 +1,35 @@
-# Context & Usage Monitor (`context-monitor`)
+# context-monitor
 
-A 100% local, offline-first Antigravity sidecar plugin for monitoring **Model Quotas**, **Live Context Window**, and **Token Usage** — with zero external network requests and zero pricing clutter.
+Local sidecar panel for Antigravity to check model quotas, context window usage, and token stats without sending any data outside your machine.
 
-## Features
+## What's inside
 
-- **Quota** (Default tab): Live remaining model quotas grouped by pool (`Gemini Models`, `Claude and GPT models`, `Gemini 4 Argon`) with reset countdowns and full model list, powered by Antigravity's local Language Server (`GetUserStatus`).
-- **Context**: Live context window utilization (`% used`, `used / limit`), stacked bar & proportional grid views, category breakdown, Prompt Cache hit ratio, and expandable details (Heavy Tool Calls, MCP Servers, Active Rules, Skills).
-- **Usage**: Fast incremental token analytics (`24h`, `7d`, `30d`, `All`), session/project scopes, Cache Hit %, SVG token volume chart, and model/session breakdowns.
+- **Quota** - Remaining quota and reset timers for each model group (`Gemini Models`, `Claude and GPT models`, `Gemini 4 Argon`), read from the local language server.
+- **Context** - Current conversation context usage, category breakdown, cache hit rate, and heavy tool calls.
+- **Usage** - Token volume chart and breakdown by model/session (`24h`, `7d`, `30d`, `All`), with no pricing or external rate fetching.
 
-## Installation
+## Install
 
-### Option 1: Clone directly into Antigravity plugins folder
+Clone directly into your Antigravity plugins folder:
 
-**Windows (PowerShell):**
 ```powershell
+# Windows (PowerShell)
 git clone https://github.com/gtwndtl/context-monitor.git "$env:USERPROFILE\.gemini\config\plugins\context-monitor"
 ```
 
-**macOS / Linux:**
 ```bash
+# macOS / Linux
 git clone https://github.com/gtwndtl/context-monitor.git ~/.gemini/config/plugins/context-monitor
 ```
 
-### Option 2: Install from a cloned local directory via CLI
+Or install from a local clone:
 
 ```bash
 git clone https://github.com/gtwndtl/context-monitor.git
 agy plugin install ./context-monitor
+agy plugin enable context-monitor
 ```
 
-Then enable **Context & Usage** in Antigravity Customizations (or run `agy plugin enable context-monitor`).
+## Open
 
-## Usage
-
-- Open from the side panel **`+`** button (`Ctrl+T` / `Cmd+T`) and **Pin Tab**, or run `/context-monitor` in chat.
+Click `+` (`Ctrl+T` / `Cmd+T`) in the side panel and select **Context & Usage**, or type `/context-monitor` in chat.
