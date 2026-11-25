@@ -4,6 +4,9 @@
   "displayName": "Context & Usage",
   "version": "1.1.0",
   "description": "100% local, offline-first sidecar panel for inspecting live context window usage, token analytics, and remaining model quotas with zero external requests and no pricing clutter.",
+  "author": "gtwndtl",
+  "homepage": "https://github.com/gtwndtl/context-monitor",
+  "repository": "https://github.com/gtwndtl/context-monitor",
   "license": "MIT",
   "keywords": [
     "context",

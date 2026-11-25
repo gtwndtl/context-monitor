@@ -10,11 +10,26 @@ A 100% local, offline-first Antigravity sidecar plugin for monitoring **Model Qu
 
 ## Installation
 
-```bash
-agy plugin install https://github.com/<your-username>/<your-repo>
+### Option 1: Clone directly into Antigravity plugins folder
+
+**Windows (PowerShell):**
+```powershell
+git clone https://github.com/gtwndtl/context-monitor.git "$env:USERPROFILE\.gemini\config\plugins\context-monitor"
 ```
 
-Or copy this folder to `~/.gemini/config/plugins/context-monitor` and enable it in Antigravity Customizations.
+**macOS / Linux:**
+```bash
+git clone https://github.com/gtwndtl/context-monitor.git ~/.gemini/config/plugins/context-monitor
+```
+
+### Option 2: Install from a cloned local directory via CLI
+
+```bash
+git clone https://github.com/gtwndtl/context-monitor.git
+agy plugin install ./context-monitor
+```
+
+Then enable **Context & Usage** in Antigravity Customizations (or run `agy plugin enable context-monitor`).
 
 ## Usage
 
