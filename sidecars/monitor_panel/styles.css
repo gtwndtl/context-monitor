@@ -427,8 +427,12 @@ details.detail-card summary::-webkit-details-marker { display: none; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
+}
+
+.usage-toolbar .segmented {
+  flex-shrink: 0;
 }
 
 .select-input {
@@ -437,8 +441,10 @@ details.detail-card summary::-webkit-details-marker { display: none; }
   border-radius: 7px;
   padding: 4px 8px;
   font-size: 12px;
-  max-width: 100%;
-  min-width: 120px;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 200px;
+  text-overflow: ellipsis;
 }
 
 .kpi-grid {
