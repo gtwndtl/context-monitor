@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Context &amp; Usage</title>
+  <script src="/preload.js"></script>
+  <link rel="stylesheet" href="/styles.css?v=1.0.0">
+</head>
+<body>
+  <header class="topbar">
+    <div class="tabs" role="tablist" aria-label="Monitor views">
+      <button type="button" class="tab-btn on" role="tab" aria-selected="true" data-tab="quota">Quota</button>
+      <button type="button" class="tab-btn" role="tab" aria-selected="false" data-tab="context">Context</button>
+      <button type="button" class="tab-btn" role="tab" aria-selected="false" data-tab="usage">Usage</button>
+    </div>
+  </header>
+
+  <!-- CONTEXT VIEW -->
+  <section id="view-context" class="view hidden">
+    <div id="cx-loading" class="loading">
+      <div class="skel-head">
+        <span class="skel" style="width: 30%; height: 16px"></span>
+        <span class="skel" style="width: 32%; height: 14px"></span>
+      </div>
+      <span class="skel" style="width: 100%; height: 10px; border-radius: 999px"></span>
+      <span class="skel" style="width: 100%; height: 84px"></span>
+    </div>
+
+    <div id="cx-empty" class="empty hidden">
+      <p>No active conversation transcript found yet.</p>
+    </div>
+
+    <div id="cx-content" class="content hidden">
+      <section class="card summary-card">
+        <div class="summary-top">
+          <div class="hero-left">
+            <span id="cx-pct" class="hero-pct num">0%</span>
+            <span class="hero-sub">used</span>
+          </div>
+          <div class="summary-controls">
+            <div class="ratio-group num">
+              <span id="cx-used">0</span>
+              <span class="sep">/</span>
+              <span id="cx-limit" class="muted">1M</span>
+            </div>
+            <div class="segmented" role="group" aria-label="Visualization mode">
+              <button type="button" id="cx-bar-btn" class="seg-btn on" data-mode="bar" title="Stacked bar">
+                <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+                  <rect x="1.5" y="5.5" width="4.5" height="3" rx="1" fill="currentColor"/>
+                  <rect x="6.75" y="5.5" width="3" height="3" rx="1" fill="currentColor" opacity="0.65"/>
+                  <rect x="10.5" y="5.5" width="2" height="3" rx="1" fill="currentColor" opacity="0.32"/>
+                </svg>
+              </button>
+              <button type="button" id="cx-grid-btn" class="seg-btn" data-mode="grid" title="Proportional grid">
+                <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+                  <rect x="1.5" y="3.5" width="3" height="3" rx="0.6" fill="currentColor"/>
+                  <rect x="5.5" y="3.5" width="3" height="3" rx="0.6" fill="currentColor" opacity="0.7"/>
+                  <rect x="9.5" y="3.5" width="3" height="3" rx="0.6" fill="currentColor" opacity="0.35"/>
+                  <rect x="1.5" y="7.5" width="3" height="3" rx="0.6" fill="currentColor"/>
+                  <rect x="5.5" y="7.5" width="3" height="3" rx="0.6" fill="currentColor" opacity="0.7"/>
+                  <rect x="9.5" y="7.5" width="3" height="3" rx="0.6" fill="currentColor" opacity="0.35"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="cx-bar" class="stacked-bar" aria-label="Context allocation bar"></div>
+        <div id="cx-grid" class="cell-grid hidden" aria-label="Context allocation grid"></div>
+
+        <div class="meta-strip">
+          <span id="cx-model" class="meta-chip">Model: —</span>
+          <span id="cx-steps" class="meta-chip num">0 steps</span>
+          <span id="cx-cache" class="meta-chip num">Cache: —</span>
+          <span id="cx-compact" class="meta-chip num hidden"></span>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2 class="card-title">Breakdown</h2>
+          <span id="cx-free-label" class="card-sub num"></span>
+        </div>
+        <div id="cx-rows" class="cat-list"></div>
+      </section>
+
+      <section id="cx-details" class="details-stack"></section>
+    </div>
+  </section>
+
+  <!-- USAGE VIEW -->
+  <section id="view-usage" class="view hidden">
+    <div class="usage-toolbar">
+      <div class="segmented" role="group" aria-label="Time period">
+        <button type="button" class="seg-btn period-btn" data-period="24h">24h</button>
+        <button type="button" class="seg-btn period-btn on" data-period="7d">7d</button>
+        <button type="button" class="seg-btn period-btn" data-period="30d">30d</button>
+        <button type="button" class="seg-btn period-btn" data-period="all">All</button>
+      </div>
+      <select id="usg-scope" class="select-input" aria-label="Scope">
+        <option value="all">All Sessions</option>
+      </select>
+    </div>
+
+    <div id="usg-loading" class="loading">
+      <span class="skel" style="width: 100%; height: 68px"></span>
+      <span class="skel" style="width: 100%; height: 140px"></span>
+    </div>
+
+    <div id="usg-content" class="content hidden">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Total Tokens</div>
+          <div id="usg-total-tok" class="kpi-val num">0</div>
+          <div id="usg-io-sub" class="kpi-sub num">0 in · 0 out</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Cache Hit</div>
+          <div id="usg-cache-pct" class="kpi-val num">0%</div>
+          <div id="usg-cache-sub" class="kpi-sub num">0 cached</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Output Tokens</div>
+          <div id="usg-out-tok" class="kpi-val num">0</div>
+          <div id="usg-reason-sub" class="kpi-sub num">0 reasoning</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Activity</div>
+          <div id="usg-sessions" class="kpi-val num">0</div>
+          <div id="usg-turns-sub" class="kpi-sub num">0 turns</div>
+        </div>
+      </div>
+
+      <section class="card">
+        <div class="card-head">
+          <h2 class="card-title">Token Volume</h2>
+          <div id="usg-legend" class="legend"></div>
+        </div>
+        <div class="chart-wrap">
+          <svg id="usg-chart" class="chart-svg" viewBox="0 0 560 150" preserveAspectRatio="none"></svg>
+          <div id="usg-tooltip" class="chart-tooltip hidden"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2 class="card-title">By Model</h2>
+        </div>
+        <div id="usg-models" class="table-list"></div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2 class="card-title">Recent Sessions</h2>
+        </div>
+        <div id="usg-sessions-list" class="table-list"></div>
+      </section>
+    </div>
+  </section>
+
+  <!-- QUOTA VIEW -->
+  <section id="view-quota" class="view">
+    <div class="quota-toolbar">
+      <div class="quota-title-group">
+        <span id="q-plan-badge" class="plan-badge hidden"></span>
+      </div>
+      <div class="quota-actions">
+        <span id="q-updated-at" class="muted num" style="font-size: 11px"></span>
+        <button type="button" id="q-refresh-btn" class="icon-btn" title="Refresh quota" aria-label="Refresh quota">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 8a6 6 0 1 1-1.76-4.24"/>
+            <path d="M14 2.5v3.5h-3.5"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="q-loading" class="loading">
+      <span class="skel" style="width: 100%; height: 74px"></span>
+      <span class="skel" style="width: 100%; height: 74px"></span>
+    </div>
+
+    <div id="q-error" class="error-box hidden"></div>
+
+    <div id="q-content" class="content hidden">
+      <section class="card">
+        <div id="q-pools" class="quota-groups"></div>
+      </section>
+
+      <details class="detail-card">
+        <summary>
+          <span>All Models</span>
+          <span id="q-models-count" class="num muted">0</span>
+        </summary>
+        <div id="q-models" class="detail-body"></div>
+      </details>
+    </div>
+  </section>
+
+  <script src="/app.js?v=1.4.0"></script>
+</body>
+</html>

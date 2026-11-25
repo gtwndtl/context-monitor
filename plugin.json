@@ -1,0 +1,20 @@
+{
+  "$schema": "https://antigravity.google/schemas/v1/plugin.json",
+  "name": "context-monitor",
+  "displayName": "Context & Usage",
+  "version": "1.1.0",
+  "description": "100% local, offline-first sidecar panel for inspecting live context window usage, token analytics, and remaining model quotas with zero external requests and no pricing clutter.",
+  "license": "MIT",
+  "keywords": [
+    "context",
+    "usage",
+    "tokens",
+    "prompt-cache",
+    "local",
+    "sidecar"
+  ],
+  "logo": "assets/logo.svg",
+  "suggestedPrompts": [
+    "Open the Context & Usage panel"
+  ]
+}

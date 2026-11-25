@@ -1,0 +1,6 @@
+{
+  "name": "monitor_panel",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "100% local Context & Usage sidecar panel"
+}
