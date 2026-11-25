@@ -584,7 +584,7 @@
                     ${resetStr ? `<span class="q-reset-label">${esc(resetStr)}</span>` : ''}
                   </div>
                   <div class="ring-right">
-                    <span class="ring-pct num">${Math.round(pct)}% left</span>
+                    <span class="ring-pct num">${Math.floor(pct)}% left</span>
                     ${renderRingSvg(pct, color)}
                   </div>
                 </div>
