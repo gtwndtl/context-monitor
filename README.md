@@ -10,24 +10,16 @@ Local sidecar panel for Antigravity to check model quotas, context window usage,
 
 ## Install
 
-Clone directly into your Antigravity plugins folder:
-
-```powershell
-# Windows (PowerShell)
-git clone https://github.com/gtwndtl/context-monitor.git "$env:USERPROFILE\.gemini\config\plugins\context-monitor"
-```
+Clone into your Antigravity plugins folder, then enable it in Customizations (or run `agy plugin enable context-monitor`):
 
 ```bash
 # macOS / Linux
 git clone https://github.com/gtwndtl/context-monitor.git ~/.gemini/config/plugins/context-monitor
 ```
 
-Or install from a local clone:
-
-```bash
-git clone https://github.com/gtwndtl/context-monitor.git
-agy plugin install ./context-monitor
-agy plugin enable context-monitor
+```powershell
+# Windows (PowerShell)
+git clone https://github.com/gtwndtl/context-monitor.git "$env:USERPROFILE\.gemini\config\plugins\context-monitor"
 ```
 
 ## Open
