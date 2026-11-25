@@ -148,8 +148,16 @@ app.api(
 
 function baseModelName(label) {
   return String(label || '')
-    .replace(/\s*\((Low|Medium|High|XHigh|Fast)\)\s*$/i, '')
+    .replace(/\s*\((Low|Medium|High|XHigh|Fast|Thinking)\)\s*$/i, '')
     .trim();
+}
+
+function modelCategory(label) {
+  const l = String(label || '').toLowerCase();
+  if (l.includes('claude') || l.includes('gpt')) return 'Claude and GPT models';
+  if (l.includes('argon')) return 'Gemini 4 Argon';
+  if (l.includes('gemini') || l.includes('orchestrator')) return 'Gemini Models';
+  return 'Other Models';
 }
 
 function buildQuotaSnapshot(raw) {
@@ -165,7 +173,7 @@ function buildQuotaSnapshot(raw) {
 
   const configs = us.cascadeModelConfigData?.clientModelConfigs || [];
   const models = [];
-  const poolMap = new Map();
+  const groupMap = new Map();
 
   for (const cfg of configs) {
     const label = cfg.label || cfg.modelOrAlias?.model || 'Unknown';
@@ -182,10 +190,10 @@ function buildQuotaSnapshot(raw) {
     });
 
     if (remainingFraction !== null) {
-      const key = `${resetTime || 'none'}|${remainingFraction.toFixed(4)}`;
-      if (!poolMap.has(key)) {
-        poolMap.set(key, {
-          key,
+      const cat = modelCategory(label);
+      if (!groupMap.has(cat)) {
+        groupMap.set(cat, {
+          title: cat,
           remainingFraction,
           remainingPct: Number((remainingFraction * 100).toFixed(1)),
           resetTime,
@@ -193,26 +201,26 @@ function buildQuotaSnapshot(raw) {
           models: [],
         });
       }
-      const pool = poolMap.get(key);
-      pool.families.add(baseModelName(label));
-      pool.models.push(label);
+      const grp = groupMap.get(cat);
+      grp.families.add(baseModelName(label));
+      grp.models.push(label);
+      // Keep lowest fraction and earliest reset if different variants exist
+      if (remainingFraction < grp.remainingFraction) {
+        grp.remainingFraction = remainingFraction;
+        grp.remainingPct = Number((remainingFraction * 100).toFixed(1));
+        grp.resetTime = resetTime;
+      }
     }
   }
 
-  const pools = Array.from(poolMap.values()).map((p) => {
-    const families = Array.from(p.families);
-    const title = families.slice(0, 3).join(' · ') + (families.length > 3 ? ` +${families.length - 3}` : '');
-    return {
-      title,
-      families,
-      modelCount: p.models.length,
-      remainingFraction: p.remainingFraction,
-      remainingPct: p.remainingPct,
-      resetTime: p.resetTime,
-    };
-  });
-
-  pools.sort((a, b) => a.remainingFraction - b.remainingFraction);
+  const pools = Array.from(groupMap.values()).map((p) => ({
+    title: p.title,
+    families: Array.from(p.families),
+    modelCount: p.models.length,
+    remainingFraction: p.remainingFraction,
+    remainingPct: p.remainingPct,
+    resetTime: p.resetTime,
+  }));
 
   return { ok: true, fetchedAt: new Date().toISOString(), plan, pools, models };
 }

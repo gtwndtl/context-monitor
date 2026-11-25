@@ -562,7 +562,7 @@
     }
 
     const pools = [...(data.pools || [])]
-      .map((p) => ({ ...p, groupTitle: friendlyPoolName(p.families || []) }))
+      .map((p) => ({ ...p, groupTitle: p.title || friendlyPoolName(p.families || []) }))
       .sort((a, b) => poolOrderScore(a.groupTitle) - poolOrderScore(b.groupTitle));
 
     $('q-pools').innerHTML = pools.length
