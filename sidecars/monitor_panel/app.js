@@ -367,7 +367,7 @@
     if (!force && cxEtag) qs.set('etag', cxEtag);
 
     try {
-      const res = await fetch(`/api/context?${qs.toString()}`);
+      const res = await fetch(`/api/context?${qs.toString()}`, { cache: 'no-store' });
       if (!res.ok) return;
       const data = await res.json();
       if (data.unchanged) return;
@@ -388,7 +388,7 @@
     } catch {}
 
     try {
-      const res = await fetch(`/api/usage?${qs.toString()}`);
+      const res = await fetch(`/api/usage?${qs.toString()}`, { cache: 'no-store' });
       if (!res.ok) return;
       const data = await res.json();
       if (data.unchanged) return;
@@ -613,7 +613,7 @@
 
   async function pollQuota() {
     try {
-      const res = await fetch('/api/quota');
+      const res = await fetch('/api/quota', { cache: 'no-store' });
       if (!res.ok) return;
       renderQuota(await res.json());
     } catch {
@@ -622,6 +622,17 @@
   }
 
   $('q-refresh-btn').addEventListener('click', pollQuota);
+
+  function refreshActiveTab(force = false) {
+    if (activeTab === 'context') pollContext(force);
+    else if (activeTab === 'usage') pollUsage(force);
+    else pollQuota();
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) refreshActiveTab(true);
+  });
+  window.addEventListener('focus', () => refreshActiveTab(false));
 
   if (typeof ResizeObserver !== 'undefined') {
     new ResizeObserver(() => {
